@@ -4,12 +4,18 @@ import "./Cart.css";
 import { cartActions } from "../store/cart-slice";
 
 const CartItem = ({ name, quantity, total, price, id }) => {
-  function incrementCartItem() {
+  const dispatch = useDispatch()
 
+  function incrementCartItem() {
+    dispatch(cartActions.addToCart({
+      id,
+      name,
+      price
+    }))
   }
 
   function decrementCartItem() {
-
+    dispatch(cartActions.removeFromCart(id))
   }
 
   return (
@@ -18,10 +24,10 @@ const CartItem = ({ name, quantity, total, price, id }) => {
       <p>${price} /-</p>
       <p>x{quantity}</p>
       <article>Total ${total}</article>
-      <button className="cart-actions" onClick={incrementCartItem}>
+      <button className="cart-actions" onClick={decrementCartItem}>
         -
       </button>
-      <button className="cart-actions" onClick={decrementCartItem}>
+      <button className="cart-actions" onClick={incrementCartItem}>
         +
       </button>
     </div>
