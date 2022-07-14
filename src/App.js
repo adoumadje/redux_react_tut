@@ -4,7 +4,7 @@ import "./App.css";
 import Auth from "./components/Auth";
 import Layout from "./components/Layout";
 import Notification from "./components/Notification";
-import { sendCartData } from "./store/cart-slice";
+import { fetchData, sendCartData } from "./store/cart-action";
 
 function App() {
   const [isFirstRender, setIsFirstRender] = useState(true)
@@ -15,13 +15,20 @@ function App() {
   const notification = useSelector(state => state.ui.notification)
 
   useEffect(() => {
+    dispatch(fetchData())
+  }, [dispatch])
+
+  useEffect(() => {
     if(isFirstRender) {
       setIsFirstRender(false)
       return
     }
 
-    dispatch(sendCartData(cart))
-  }, [cart])
+    if(cart.changed) {
+      dispatch(sendCartData(cart))
+    }
+    
+  }, [cart, dispatch, sendCartData])
 
   return (
     <div className="App">
